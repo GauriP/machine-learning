@@ -25,7 +25,9 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
-        self.trial =0 
+        #We need the trial number to calculate the value of epsilon.
+        
+        self.trialN = 0 
 
 
     def reset(self, destination=None, testing=False):
@@ -42,23 +44,22 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.trial += 1
+        self.trialN += 1
 
-        if testing:
+        if testing == True:
             self.epsilon = 0
             self.alpha = 0
         else:
-            #self.epsilon = math.pow(self.alpha, self.trial)
-            
+           
             # default learning
             #self.epsilon = self.epsilon - 0.05
             
             # improved learning
-            #self.epsilon = math.exp(-1 * self.alpha * self.trial)
-            # self.epsilon = math.pow(self.alpha, self.trial)
+            #self.epsilon = math.exp(-1 * self.alpha * self.trialN)
+            # self.epsilon = math.pow(self.alpha, self.trialN)
             # print self.trial
-            #self.epsilon = math.pow(self.trial, -2)
-            self.epsilon = math.cos(self.alpha * self.trial)
+            #self.epsilon = math.pow(self.trialN, -2)
+            self.epsilon = math.cos(self.alpha * self.trialN)
 
         return None
 
@@ -79,12 +80,10 @@ class LearningAgent(Agent):
         # When learning, check if the state is in the Q-table
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
-        print inputs
         state = (waypoint, inputs['oncoming'], inputs['light'])
         #state = (waypoint, inputs['oncoming'], inputs['light'], inputs['left'])
         #state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'])
-        #self.createQ(state)
-
+        
         return state
 
 
@@ -96,15 +95,9 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-        #max_Q = self.Q[self.state].index(max(self.Q[self.state]))
-       
-        #maxQ = max(self.Q[self.state])
-        #print maxQ
-        print self.Q[self.state]
-
-        maxQ = max(self.Q[self.state], key=(lambda key: self.Q[self.state][key]))
-        print maxQ
-
+        
+        maxQ = max(self.Q[self.state])
+        
         return maxQ 
 
 
@@ -117,7 +110,7 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-        if self.learning and state not in self.Q.keys():
+        if state not in self.Q.keys():
             self.Q[state]= {'left':0, 'right':0, 'forward':0, None:0}
 
         return
@@ -130,7 +123,6 @@ class LearningAgent(Agent):
         # Set the agent state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
-        #possibledirections=['left','right','forward',None]
         action = random.choice(self.valid_actions)
         ########### 
         ## TO DO ##
@@ -139,21 +131,10 @@ class LearningAgent(Agent):
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
         
-        #if not self.learning:
-        #    print "Not learning"
-        #    action = random.choice(possibledirections)
-        #else:
-        #    if self.epsilon <  random.random():
-        #        print "Random choice with epsilon less than random"
-        #        action = action = random.choice(possibledirections)
-        #    else:
-        #        action = self.get_maxQ(state)
         if self.learning:
             if self.epsilon > random.random():
-                #print "Random value"
                 action = random.choice(self.valid_actions)
             else:
-                #print "MaxQ"
                 action = self.get_maxQ(state)
  
         return action
