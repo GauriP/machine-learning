@@ -8,7 +8,7 @@ class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """ 
 
-    def __init__(self, env, learning=True, epsilon=0.5, alpha=0.6):
+    def __init__(self, env, learning=True, epsilon=0.5, alpha=0.5):
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
@@ -51,8 +51,7 @@ class LearningAgent(Agent):
             #self.epsilon = math.pow(self.alpha, self.trial)
             
             # default learning
-            #self.epsilon = self.epsilon - 0.05
-            
+             #self.epsilon = self.epsilon - 0.05
             # improved learning
             #self.epsilon = math.exp(-1 * self.alpha * self.trial)
             # self.epsilon = math.pow(self.alpha, self.trial)
@@ -81,7 +80,7 @@ class LearningAgent(Agent):
         #   For each action, set the Q-value for the state-action pair to 0
         print inputs
         state = (waypoint, inputs['oncoming'], inputs['light'])
-        #state = (waypoint, inputs['oncoming'], inputs['light'], inputs['left'])
+        #state = (waypoint, inputs['oncoming'], inputs['light'], inputs['right'],inputs['left'])
         #state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'])
         #self.createQ(state)
 
@@ -150,10 +149,10 @@ class LearningAgent(Agent):
         #        action = self.get_maxQ(state)
         if self.learning:
             if self.epsilon > random.random():
-                #print "Random value"
+                print "Random value"
                 action = random.choice(self.valid_actions)
             else:
-                #print "MaxQ"
+                print "MaxQ"
                 action = self.get_maxQ(state)
  
         return action
@@ -163,13 +162,19 @@ class LearningAgent(Agent):
         """ The learn function is called after the agent completes an action and
             receives an award. This function does not consider future rewards 
             when conducting learning. """
-        
+        #self.Q[self.state][self.A.index(action)] = \
+        #    (1-alpha)*self.Q[self.state][self.A.index(action)] + \
+        #    (alpha * (reward + gamma * max(self.Q[next_state])))
+
         ########### 
         ## TO DO ##
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-       
+        #if self.learning:
+        #print self.Q
+        #if action != None:
+        #print self.Q[self.state][action]
         self.Q[self.state][action] = (1-self.alpha) * self.Q[self.state][action] + self.alpha * reward
 
         return
