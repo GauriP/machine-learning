@@ -1,3 +1,6 @@
-# Project 5: Capstone
+# Project 5: Capstone:
 
-The Capstone Project for the Machine Learning Engineer Nanodegree does not have any requirements for code, libraries, or datasets. You are free to choose your project as you wish! For students who are unable to construct a capstone project on their own imagination, a pre-built project has been provided in `robot_motion_planning`.
+
+Proposal.pdf: This file gives the proposal for the capstone project.
+train.csv : the training data provided by kaggle for the Animal Shelter Outcome competition.
+test.csv: test data provided.
