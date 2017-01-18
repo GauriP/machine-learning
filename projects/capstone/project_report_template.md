@@ -1,21 +1,57 @@
 # Capstone Project
 ## Machine Learning Engineer Nanodegree
-Joe Udacity  
-December 31st, 2050
+Gauri Phatak
+January 2017
 
 ## I. Definition
-_(approx. 1-2 pages)_
+
 
 ### Project Overview
-In this section, look to provide a high-level overview of the project in layman’s terms. Questions to ask yourself when writing this section:
-- _Has an overview of the project been provided, such as the problem domain, project origin, and related datasets or input data?_
-- _Has enough background information been given so that an uninformed reader would understand the problem domain and following problem statement?_
+
+In this project I will be using the Austin Animal shelter data provided by Austin Animal Center to predict the outcomes for shelter animals. This data is part of a completed competition on Kaggle website. Based on the sources cited in the references section, 8-12 million animals enter shelters every year and about 5-9 milllion of those animals are euthanised. In this project we will be exploring the data provided to understand the trends behind the animal adoptions for the city of Austin. We will be starting of with Exploratory Data Analysis, both visual and statistical data. Once we get an idea about the correlations in the data, we will use classification methods to predict if the animal will adopted or not. This is a multiclass classification problem, and we will get the benchmark for the analysis comparison form the outcomes of the data science competition on kaggle.
 
 ### Problem Statement
 In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:
 - _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
 - _Have you thoroughly discussed how you will attempt to solve the problem?_
 - _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
+
+The underlying problem we are trying to solve in simplistic terms is to, predict the outcome for an animal based on the features and data entries provided to us from the Austin animal center. 
+Here is the summary of the data we are dealing with:
+
+      AnimalID   Name             DateTime OutcomeType OutcomeSubtype  \
+count     26729  19038                26729       26729          13117   
+unique    26729   6374                22918           5             16   
+top     A705677    Max  2015-08-11 00:00:00    Adoption        Partner   
+freq          1    136                   19       10769           7816   
+
+       AnimalType SexuponOutcome AgeuponOutcome                   Breed  \
+count       26729          26728          26711                   26729   
+unique          2              5             44                    1380   
+top           Dog  Neutered Male         1 year  Domestic Shorthair Mix   
+freq        15595           9779           3969                    8810   
+
+              Color  
+count         26729  
+unique          366  
+top     Black/White  
+freq           2824  
+
+
+As we can see in summary of the data below, most of the data we are dealing with is categorical data. The size of the data frame is 26729 extries of data. Here is a sample of the head of the dataframe. I used Pandas to download the training and testing data from CSV file and create a pandas dataframe using this data.
+**Add the head of dataframe here***
+
+I will modifying almost every columns of data avaiable to us to check if get any additional importtant information out of it. 
+
+**AnimalID: **Looking at the AnimalID column , I figured the the first three characters of the ID are repeating for many or the IDs, Hence I thought it might give us some location information in the data. But looking at the data from the testing data, It looks like the same pattern is followed with the testing data animal IDs. hence this column becomes useless to us for all practical purposes.
+
+**Name: ** The name itself of an animal is not of important to us. but it might be important to note that having a name or not might influence the outcome for the animal.
+
+**DateTime: ** This is a very interesting column which gives us a lot of information. This column gives us the data and time information at the time of the outcome. Using this column we can extract the weekday, month and time of the day the outcome occured. We will see in the data exploration and visualisation section how the outcome corresponds to the time , day and month of the outcome.
+
+**OutcomeType: ** This is the target variable i.e. the variable we are trying to predict. We have 5 categories for prediction.
+
+
 
 ### Metrics
 In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
