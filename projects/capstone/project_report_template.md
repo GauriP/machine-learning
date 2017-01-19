@@ -26,15 +26,6 @@ The Output of the algorithm will give us the probability of outcome for each out
 
 ### Metrics
 
-Evaluation (Directly from Kaggle)
-
-Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
-
-logloss=−1N∑i=1N∑j=1Myijlog(pij),
-logloss=−1N∑i=1N∑j=1Myijlog⁡(pij),
-where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(i\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(i\\) belongs to outcome \\(j\\).
-
-The submitted probabilities for a given animal are not required to sum to one because they are rescaled prior to being scored (each row is divided by the row sum). In order to avoid the extremes of the log function, predicted probabilities are replaced with \\(max(min(p,1-10^{-15}),10^{-15})\\).
 
 The test data that is provided by the kaggle team does not provide the output vector. Hence, evaluation is possible only in the kaggle environment. I will be using the predict_prob_ function from randomForest algorithm from sklearn, that gives the probability for each factor in the outcometype column. 
 
@@ -123,19 +114,35 @@ In this plot we see the boxplot for distribution of outcome over the months. We 
 
 
 ### Algorithms and Techniques
-In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
+
+Given than the target variable for our data is categorical value, I will be using classification method for this project. I will be starting off with decision tree algorithm to get an idea of what the score would be with just a single tree implementation. then i move on to RandomForest algorithm. 
+
+The deicision tree algorithm would be the benchmakr for my code. But the Kaggle competition has provided with a built in benchmark value for this particular competition. 
+
+Random forest classifier is a ensemble method where in the algorithm creats number of decision trees based on the data provided tot he algorithm. The issue with decision tree classifier is that it overfits the data. Random forest avoids such an issue becuase it uses multiple trees. The data selected for each tree is gathered by using bootstrap aggregation method or bagging. Bagging randomly chooses a subset of data form the training data with replacement and creates decision tree based on this data.
+After training, for prediction decision is made by taking majority vote from the decision trees that are generated during training. One thing to note with random forest algorithm is that it uses modified tree learning algorithm, this means that if a particular features is a strong predictor, these features will be selected in many of the trees giving strong correleation between the trees thus created.
+In egenral case if the problem is that of classification, Sqrt(p) features will be used for creating the trees, p is the number of available features.
+
+The dataset that I am working with here is a good candidate for random forest algorithm. The issue of voerfitting which we observe in decision trees is not present in random forest. We dont have to worry about tuning the data too much for random forest algorithm. It is fast and scalable. But if we have to rebuild the tree if new data comes into picture. But since that is not a point of contention for us I am going to go ahead with Random Forest as the classification algorithm.
 
 ### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+
+Evaluation (Directly from Kaggle)
+
+Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
+
+logloss=−1N∑i=1N∑j=1Myijlog(pij),
+logloss=−1N∑i=1N∑j=1Myijlog⁡(pij),
+where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(i\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(i\\) belongs to outcome \\(j\\).
+
+The submitted probabilities for a given animal are not required to sum to one because they are rescaled prior to being scored (each row is divided by the row sum). In order to avoid the extremes of the log function, predicted probabilities are replaced with \\(max(min(p,1-10^{-15}),10^{-15})\\).
+
+[Link to Kaggle competition](https://www.kaggle.com/c/shelter-animal-outcomes).
+In the [Leaderboard](https://www.kaggle.com/c/shelter-animal-outcomes/leaderboard) page in the link to the competition above we can see that Kaggle has created an All Adopted Benchmark. I will be using this benchmark for project purpose. But as a personal challenge i will be suing the decision tree algorithm for my benchmark, And aim for a score lower than the deiciosn tree algorithm would provide. The reasonf or this is that i can run Decision tree on the data frame I have created  for both the algorithms and do an apples to apples comparison.
 
 
 ## III. Methodology
-_(approx. 3-5 pages)_
+
 
 ### Data Preprocessing
 In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
