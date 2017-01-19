@@ -10,11 +10,131 @@ January 2017
 
 In this project I will be using the Austin Animal shelter data provided by Austin Animal Center to predict the outcomes for shelter animals. This data is part of a completed competition on Kaggle website. Based on the sources cited in the references section, 8-12 million animals enter shelters every year and about 5-9 milllion of those animals are euthanised. In this project we will be exploring the data provided to understand the trends behind the animal adoptions for the city of Austin. We will be starting of with Exploratory Data Analysis, both visual and statistical data. Once we get an idea about the correlations in the data, we will use classification methods to predict if the animal will adopted or not. This is a multiclass classification problem, and we will get the benchmark for the analysis comparison form the outcomes of the data science competition on kaggle.
 
+
 ### Problem Statement
-In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:
-- _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
-- _Have you thoroughly discussed how you will attempt to solve the problem?_
-- _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
+
+The goal is to predict the outcome for an animal which enters the animal Shelter.
+    - Download the data from Kaggle website.
+    - Preprocess the data columns as explained in the exploratory data analysis.
+    - Run the benchmark DecisionTree algorithm. Gather the probability of the outcome 
+    - Run the RandomForest algorithm on the data.
+    - Run GridsearchCV algorithm to tune the data.
+    - Compare the output from the different algorithms and complete analysis.
+    
+The Output of the algorithm will give us the probability of outcome for each output category.
+
+
+### Metrics
+
+Evaluation (Directly from Kaggle)
+
+Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
+
+logloss=−1N∑i=1N∑j=1Myijlog(pij),
+logloss=−1N∑i=1N∑j=1Myijlog⁡(pij),
+where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(i\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(i\\) belongs to outcome \\(j\\).
+
+The submitted probabilities for a given animal are not required to sum to one because they are rescaled prior to being scored (each row is divided by the row sum). In order to avoid the extremes of the log function, predicted probabilities are replaced with \\(max(min(p,1-10^{-15}),10^{-15})\\).
+
+The test data that is provided by the kaggle team does not provide the output vector. Hence, evaluation is possible only in the kaggle environment. I will be using the predict_prob_ function from randomForest algorithm from sklearn, that gives the probability for each factor in the outcometype column. 
+
+
+
+## II. Analysis
+
+
+### Data Exploration
+
+The data form the Animal Shelter Outcome competition in kaggle is one csv file of training data and one file of testing data. 
+Here is a short explanation of the features and its dtype provided to us:
+
+AnimalID          object : Unique ID provided to each animal.
+Name              object : Name given to the animal. Some fields are left blank, possibly because the animal might not have a tag at time of admission.
+DateTime          object : Date and time at the time of outcome
+OutcomeType       object : This is the outcome we are expecting for each animal. We have 5 categories for this data
+OutcomeSubtype    object : This is a peripheral outcome for the anima. Some of the entries provide reason for the outcometype. 
+AnimalType        object : Animal type is the type of animal. In this case either a cat or a dog.
+SexuponOutcome    object : This features tells us if the animal is Male or Female and intact or spyaed/neutered.
+AgeuponOutcome    object : This give the age of the animal upon outcome.
+Breed             object : This gives the breed of the animal and tells us if they are mixed breed or not.
+Color             object : This feature gives the prominent colors found in the animal.
+
+In the test data we do not have OutcomeType and OutcomeSubtype column. The scoring comparison can be done onyl directly with the kaggle submissions page. The AnimalID column is given as ID column in test data. some of the data entries for the columns above is blank. This might be due to data entry error or lack of information. We will take a look into this further in the data pre processing section. 
+
+### Exploratory Visualization
+In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
+- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
+- _Is the visualization thoroughly analyzed and discussed?_
+- _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+The plots below give relation between different feature and the outcome for each animal. We will also take a look multivariate plots.
+
+The plot below shows the time count for the given data. We can see that most of the entries we observe are taking place between 11 am and 7.30 p.m. this would make sense since the shelter is open from 11 a.m. till 7 p.m. We do see one anomaly in the data which shows the count for about 8.30 shoot up really high.  
+
+<img src="files/TimePlot.png">
+
+We will see in further plots where this anomaly lies. 
+
+<img src="files/DatePlot.png">
+
+Next we take a look at the data trends over Date. We can see a sinosoidal pattern here. We see that more animals are processed through the shelter during the summer months than during the winter months. We will see further how they are divided for diffrent outcome types.
+
+<img src="files/AnimalType.png">
+In the plot above we see that most of the animals both cats and dogs are adopted out or transfered. A lot more dogs are returned to owners. than cats. They have not specified if the return to owner features means if the animal was lost it is returned or if the animal does not get adopted after surrender it is not returned. We can see that the number of cats dying is dlightly higher than dogs dying. and the number of dogs euthanised is slightly higher than cats euthanised. the number of transfers for cats is higher than Dogs.
+
+<img src="files/Gender.png">
+In the plot above we can see the gender distribution of the animals according to the outcome type. We can see that most of the animals who get adopted are either male or female. We have an unknwon category where we do not know the gender of the animal upon outcome, this can be a clerical error. We can see that we know the gender of all the animals that are adopted. 
+
+<img src="files/Age.png">
+We can see this distribution of cats and dogs over the major age brackets in the box plot above. We can see that most of the adoption that happen for both cats and dogs happen for lower age group of animals. Interestingly most of the cats that get euthanised spread over a wide range of age. and most of the cats that died in the shelter are very young. This might be because the animal is sick to begin with.
+
+<img src="files/Mix.png">
+In the violin plot above we can see the distribution of animals based on if they are mixed breed or not, with the age of the animal over y axis. We can see that most of the adoption happen at lower age for both mix and purebred aniamls. while most of the animals euthanised are spread over lower age groups if they are mix brreds and the have a more even spread if they are purebred animals. 
+
+<img src="files/Repro.png">
+Here we see the distribution of number of aniamsl based on if they were intact or not at the time of outcome. Most of the animals that get Adopted are spayed or neutered. We can see most of the animals that get transfered are intact. We can see that a lot many animals that are euthanised or die in care are intact. Many shelter has a rule where upon adoption the animals has to be fixed. This plot might be an indication of that rule. Very few animals that get adopted are infact intact. 
+
+We will now see some time based outcome plots. We will see the distribution of outcomes over the day of the week, month and time of day. 
+
+<img src="files/timeofDay.png">
+<img src="files/WeekDay.png">
+<img src="files/Month.png">
+
+We can see in the plots above the patterns for outcomes over different time metrics. In the first plot we can see that most of the adoptions happen during Afternoon and evening. Most of the transfers happen during Afternoon. Most of the return to owner  happen during afternoon and evening. 
+
+In the 2nd plot the Day of the week start from Monday denoting 0 and Saturday and sunday denoted by 5 and 6. We can see that most adoptions happen during the weekend i.e. Saturday and Sunday. This makes sense, since most people would be free during the weekends to come out to checkout animals for adoption.
+
+When we look at the distribution over the months we can see the sinosoidal distribution that we saw in the 2nd plot in this section. 
+
+<img src="files/MonthAge.png">
+
+In this plot we see the boxplot for distribution of outcome over the months. We have he age distribution along the y axis. 
+
+
+
+
+
+
+### Algorithms and Techniques
+In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
+- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
+- _Are the techniques to be used thoroughly discussed and justified?_
+- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
+
+### Benchmark
+In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
+- _Has some result or value been provided that acts as a benchmark for measuring performance?_
+- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+
+
+## III. Methodology
+_(approx. 3-5 pages)_
+
+### Data Preprocessing
+In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
+- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
+- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
+- _If no preprocessing is needed, has it been made clear why?_
 
 The underlying problem we are trying to solve in simplistic terms is to, predict the outcome for an animal based on the features and data entries provided to us from the Austin animal center. 
 Here is the summary of the data we are dealing with:
@@ -51,50 +171,34 @@ I will modifying almost every columns of data avaiable to us to check if get any
 
 **OutcomeType: ** This is the target variable i.e. the variable we are trying to predict. We have 5 categories for prediction.
 
+**OutcomeSubtype: ** This column gives information about the reasons for the outcometype for some of the entries. I had intended to use this since it seems to be givning information about why the decision for the outcomes are taken, but in the kaggle test data we can see that they have not provided this column. Hence, i will not be taking this column into consideration for the purpose of this report.
+
+**AnimalType :** We have two unique animal types in this dataset. The animals caneither be dogs or cats. We will not be making any changes to this column.
+
+**SexUponOutcome: ** Sexupon outcome column gives us the gender of each individual animal. IT also gives us information if the animal is nutered/spyaed or intact. We have 5 categories here. It seems to be that there is a lot of information compacted into one column here. I decided to split this column into the gender or the animal and if they are intact or not. There are entries where this information is unknown, I have just left those entries as unknown.
+
+**AgeUponOutcome: ** Age upon outcome gives us the information about that particular animal. This column gives string information about the age of the animal is weeks, months or years. I have converted the entries into the age of animal is days. for e.g. if the entry says the age of an animal is '5 months' I multiple 5 by 30 to get the approximate age of the animal. This method has its flaws since we would not know the exact age of the animals. But we can get a good approximation.
+
+**Breed: ** This column gives information about the breed of the animals. We also get information if the animal is mix breed or not. I have split this column to give two columns with more concise breed information. the first column tells us if the animal is mix breed or pure bred. The other column takes into account only the first mentioned column in case if the two breeds are seperated by a '/'.
+
+**Color: ** This column gives the color information about the breed of the animal. If the data gives multiple colors for each animal, I choose only the first color. This reduces the number of factors we have to take into consideration. 
+
+This will give us the various columns we can work with. I have used random forest algorithm to model the data and the decision tree algorithm as the benchmark for the data. The kaggle competition this project is based on evaluates the data using log_loss  method. And the benchmark score that they have used for the competition is **20.25113**. I will be considering this as the benchmark for the project. But as a personal benchmark to do better than would be the decision tree algorithm using the data the I have molded. 
+
+Once I have created the various new columns with the relevant data i visualize them to get a good idea about the trends i can observe. We can see those visualisations in the exploratory visualisation section below. Once we get an idea of which columns might have a higher weight towards the decision. We can see the corelation values for this data in the Data exploration segment. For calculating corelation between the variables I am going to use Spearmans Rho or Kendalls Tau since Pearsons Rho needs calculation of mean for calculating the corelation. We use the pandas corr function indicating the type of correlation. 
+
+To set the bench mark i first strat with the decisiontree algorithm from sklearn library. Then move onto the rnaodm forest algorithm form sklearn library as well. to get the best parameters for the algorithm i ran the gridsearchCV algorithm with the grid param as given below:
+param_grid = {"max_depth": [1,3,6,10],
+              "max_features": range(1,10,1),
+              "min_samples_split": range(2,10,1),
+              "min_samples_leaf": range(1,10,1),
+              "bootstrap": [True, False],
+              "criterion": ["gini", "entropy"]}
+What this function does is, it takes the initialised ML algorithm , which in our case is the random forest algorithm and runs combinations for the grid parameters given above. The thing to note about grid searchCV is that it does not fit over all the parameters, it fits over parameters selectively, depending on if the parameter would generate a good result.
+In my case with the above parameters it took a very long time for the gridsearch algorithm to run.
 
 
-### Metrics
-In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
-- _Are the metrics you’ve chosen to measure the performance of your models clearly discussed and defined?_
-- _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
 
-
-## II. Analysis
-_(approx. 2-4 pages)_
-
-### Data Exploration
-In this section, you will be expected to analyze the data you are using for the problem. This data can either be in the form of a dataset (or datasets), input data (or input files), or even an environment. The type of data should be thoroughly described and, if possible, have basic statistics and information presented (such as discussion of input features or defining characteristics about the input or environment). Any abnormalities or interesting qualities about the data that may need to be addressed have been identified (such as features that need to be transformed or the possibility of outliers). Questions to ask yourself when writing this section:
-- _If a dataset is present for this problem, have you thoroughly discussed certain features about the dataset? Has a data sample been provided to the reader?_
-- _If a dataset is present for this problem, are statistics about the dataset calculated and reported? Have any relevant results from this calculation been discussed?_
-- _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_
-- _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_
-
-### Exploratory Visualization
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
-
-### Algorithms and Techniques
-In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
-
-### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
-
-
-## III. Methodology
-_(approx. 3-5 pages)_
-
-### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
 
 ### Implementation
 In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
