@@ -71,34 +71,41 @@ The plots below give relation between different feature and the outcome for each
 
 The plot below shows the time count for the given data. We can see that most of the entries we observe are taking place between 11 am and 7.30 p.m. this would make sense since the shelter is open from 11 a.m. till 7 p.m. We do see one anomaly in the data which shows the count for about 8.30 shoot up really high.  
 
-<img src="files/TimePlot.png">
+<img src="TimePlot.png">
 
 We will see in further plots where this anomaly lies. 
 
-<img src="files/DatePlot.png">
+<img src="DatePlot.png">
 
 Next we take a look at the data trends over Date. We can see a sinosoidal pattern here. We see that more animals are processed through the shelter during the summer months than during the winter months. We will see further how they are divided for diffrent outcome types.
 
-<img src="files/AnimalType.png">
+<img src="AnimalType.png">
+
 In the plot above we see that most of the animals both cats and dogs are adopted out or transfered. A lot more dogs are returned to owners. than cats. They have not specified if the return to owner features means if the animal was lost it is returned or if the animal does not get adopted after surrender it is not returned. We can see that the number of cats dying is dlightly higher than dogs dying. and the number of dogs euthanised is slightly higher than cats euthanised. the number of transfers for cats is higher than Dogs.
 
-<img src="files/Gender.png">
+<img src="Gender.png">
+
 In the plot above we can see the gender distribution of the animals according to the outcome type. We can see that most of the animals who get adopted are either male or female. We have an unknwon category where we do not know the gender of the animal upon outcome, this can be a clerical error. We can see that we know the gender of all the animals that are adopted. 
 
-<img src="files/Age.png">
+<img src="Age.png">
+
 We can see this distribution of cats and dogs over the major age brackets in the box plot above. We can see that most of the adoption that happen for both cats and dogs happen for lower age group of animals. Interestingly most of the cats that get euthanised spread over a wide range of age. and most of the cats that died in the shelter are very young. This might be because the animal is sick to begin with.
 
-<img src="files/Mix.png">
+<img src="Mix.png">
+
 In the violin plot above we can see the distribution of animals based on if they are mixed breed or not, with the age of the animal over y axis. We can see that most of the adoption happen at lower age for both mix and purebred aniamls. while most of the animals euthanised are spread over lower age groups if they are mix brreds and the have a more even spread if they are purebred animals. 
 
-<img src="files/Repro.png">
+<img src="Repro.png">
+
 Here we see the distribution of number of aniamsl based on if they were intact or not at the time of outcome. Most of the animals that get Adopted are spayed or neutered. We can see most of the animals that get transfered are intact. We can see that a lot many animals that are euthanised or die in care are intact. Many shelter has a rule where upon adoption the animals has to be fixed. This plot might be an indication of that rule. Very few animals that get adopted are infact intact. 
 
 We will now see some time based outcome plots. We will see the distribution of outcomes over the day of the week, month and time of day. 
 
-<img src="files/timeofDay.png">
-<img src="files/WeekDay.png">
-<img src="files/Month.png">
+<img src="timeofDay.png">
+
+<img src="WeekDay.png">
+
+<img src="Month.png">
 
 We can see in the plots above the patterns for outcomes over different time metrics. In the first plot we can see that most of the adoptions happen during Afternoon and evening. Most of the transfers happen during Afternoon. Most of the return to owner  happen during afternoon and evening. 
 
@@ -106,7 +113,7 @@ In the 2nd plot the Day of the week start from Monday denoting 0 and Saturday an
 
 When we look at the distribution over the months we can see the sinosoidal distribution that we saw in the 2nd plot in this section. 
 
-<img src="files/MonthAge.png">
+<img src="MonthAge.png">
 
 In this plot we see the boxplot for distribution of outcome over the months. We have he age distribution along the y axis. 
 
