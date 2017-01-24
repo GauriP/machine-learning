@@ -151,15 +151,12 @@ Evaluation (Directly from Kaggle)
 
 Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
 
-$$\sum_{i=1}^N$$
-$$logloss= (-1/N)\sum_{i=1}^{N} \sum_{j=1}^{M}Y_ij log(P_ij)$$
+$$logloss = (-1/N) \sum_{i=1}^N \sum_{j=1}^M Y_ij log(P_ij)$$
 
 Where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(I\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(I\\) belongs to outcome \\(j\\).
 
-The submitted probabilities for a given animal are not required to sum to one because they are rescaled prior to being scored (each row is divided by the row sum). In order to avoid the extremes of the log function, predicted probabilities are replaced with \\(max(min(p,1-10^{-15}),10^{-15})\\).
-
 [Kaggle competition](https://www.kaggle.com/c/shelter-animal-outcomes).
-In the [Leaderboard](https://www.kaggle.com/c/shelter-animal-outcomes/leaderboard) page in the link to the competition above we can see that Kaggle has created an All Adopted Benchmark. I will be using this benchmark for project purpose. But as a personal challenge I will be using the decision tree algorithm as a benchmark, And aim for a better score as compared to decision tree algorithm. The reason for this is that I can run Decision tree on the data frame I have cleaned for both the algorithms and do an apples to apples comparison.
+In the [Leaderboard](https://www.kaggle.com/c/shelter-animal-outcomes/leaderboard) page in the link to the competition above we can see that Kaggle has created an All Adopted Benchmark. I will be using this benchmark for project purpose. But as a personal challenge I will be using the decision tree algorithm as a benchmark, and aim for a better score as compared to decision tree algorithm. The reason for this is that I can run Decision tree on the data frame I have cleaned for both the algorithms and do an apples to apples comparison.
 
 
 ## III. Methodology
@@ -186,7 +183,7 @@ Here is the summary of the data we are dealing with:
 |freq     |   15595    |       9779   |        3969  |                  8810 |        2824  |
 
 
-As we can see in summary of the data below, most of the data we are dealing with is categorical data. The size of the data frame is 26729. Here is a sample of the head of the data-frame. I used Pandas to download the training and testing data from CSV file and create a pandas data frame using this data.
+As we can see in summary of the data below, most of the data we are dealing with is categorical data. The size of the data frame is 26729. Here is a sample of the head of the data-frame. I used Pandas to download the training and testing data from CSV file and create a pandas data frame using this data. Sample of the data frame is given below:
 
 
 | AnimalID | Name | DateTime | OutcomeType | OutcomeSubtype | AnimalType | SexuponOutcome | AgeuponOutcome | Breed | Color |
@@ -222,9 +219,11 @@ We will be modifying almost every column of data available to us to check if we 
 
 This will give us the various columns we can work with. I have used random forest algorithm to model the data and the decision tree algorithm as the benchmark for the data. The kaggle competition this project is based on evaluates the data using log_loss  method. And the benchmark score that they have used for the competition is **20.25113**. I will be considering this as the benchmark for the project. But as a personal benchmark to do better than would be the decision tree algorithm using the data the I have molded. 
 
-Once I have created the various new columns with the relevant data I visualize them to get a good idea about the trends I can observe. We can see those visualizations in the exploratory visualization section below. Once we get an idea of which columns might have a higher weight towards the decision. We can see the correlation values for this data in the Data exploration segment. For calculating correlation between the variables I am going to use Spearmans Rho or Kendalls Tau since Pearsons Rho needs calculation of mean for calculating the correlation. We use the pandas corr function indicating the type of correlation. 
+Once I have created the various new columns with the relevant data I visualize them to get a good idea about the trends I can observe. We can see those visualizations in the exploratory visualization section. Once we get an idea of which columns might have a higher weight towards the decision. For calculating correlation between the variables I am going to use Spearmans Rho or Kendalls Tau since Pearsons Rho needs calculation of mean for calculating the correlation. We use the pandas corr function indicating the type of correlation. Here is the correlation visualised using seaborn:
 
-To set the bench mark I first start with the decision-tree algorithm from sklearn library. Then move onto the random forest algorithm form sklearn library as well. To get the best parameters for the algorithm I ran the gridsearchCV algorithm with the grid param as given below:
+<img src="corr.png">
+
+To set the bench mark I first start with the decision-tree algorithm from sklearn library. Then move onto the random forest algorithm. To get the best parameters for the algorithm I ran the gridsearchCV algorithm with the grid param as given below:
 
 
 param_grid = 
@@ -244,10 +243,9 @@ In my case with the above parameters it took a very long time for the grid-searc
 
 ### Implementation
 
-Sklearn library was used in the implementation of this algorithm. 
-
+Sklearn library was used in the implementation of this project. 
 Before I could run any classification algorithm on the data as is, I ran label-encoder on the categorical data in the dataset. This makes the data usable in the algorithms we tried for modeling. 
-I ran the simple out the box Decision tree algorithm, and then the Random Forest algorithm. Further tuning with gridsearchCV was tried to get the best parameters.
+I ran the simple out the box Decision tree algorithm, and then the Random Forest algorithm. Further tuning with gridsearchCV and RandomizedsearchCV was tried to get the best parameters.
 The algorithm fitting process was relatively straightforward in this project. The tricky part was gathering useful information from the dataset that we were provided. Since we used Random forest algorithm, I did not need to cross-validation to check cross-validation score on the data.
 Testing was performed on data provided by kaggle, and since they had not provided with the correct output the accuracy of the output could only be tested using the score on the kaggle leaderboard. 
 Once the training data was fit using Random-forest I ran the predict_proba function on the testing data. 
@@ -263,7 +261,7 @@ param_grid = {"max_depth": [3,6,10],
               "bootstrap": [True, False],
               "criterion": ["gini", "entropy"]}
        
-I saw a marked improvement in the RandomForest implementation using the tuned parameters.  
+I saw a marked improvement in the RandomForest implementation using the tuned parameters. 
 
 
 
@@ -287,7 +285,7 @@ Parameters:
 
 ### Justification
 
-The bench mark score that is provided on the Kaggle competition leaderboard is 20.25113 (log-loss method as described earlier). My personal benchmark using Decision tree classifier scores at 16.3507. The results I get from using random forest algorithm right out of the box is 1.0219. The result I get from tuning the random forest algorithm using RandomizedCV is **0.86391**. the result I get from using GridsearchCV is **0.86818**. I ran the RandomizedsearchCV with a larger set of parameters. The score i got with that experiment is **0.85437**. As we can see the result we got with this model ismuch better than the grid searchCV result. We cannot run the same parameter grid in GridsearchCV since it would take prohibitive amount of time to run the grid with these many parameter values. 
+The bench mark score that is provided on the Kaggle competition leaderboard is **20.25113** (log-loss method as described earlier). My personal benchmark using Decision tree classifier scores at 16.3507. The results I get from using random forest algorithm right out of the box is 1.0219. The result I get from tuning the random forest algorithm using RandomizedCV is **0.86391**. the result I get from using GridsearchCV is **0.86818**. I ran the RandomizedsearchCV with a larger set of parameters. The score i got with that experiment is **0.85437**. As we can see the result we got with this model is slightly better than the grid searchCV result. We cannot run the same parameter grid in GridsearchCV since it would take prohibitively longer amount of time to run the grid with these many parameter values. 
 There are other solutions on the Kaggle leaderboard which have performed much better classification than the results I have found. Based on this my conclusion is while the model implemented here is giving a good score it still needs to be tuned further to to be useful in a production environment.
 
 
@@ -300,11 +298,13 @@ We will take a look at the correlation matrix of the features from the final dat
 
 <img src="corr.png">
 
-Analyze the correlation matrix.
+The correlation between a number of parameters seems weak at best. outcometype variable seems to be having negative correlation with many of the other features we see here. Overall this a losely correlated feature set. Hence most features would carry their own weight.
 
-Also we can see the importance given to every feature by checking the 'Feature_importance_' values we get from RandomForest classifier.
+We can see the importance given to every feature by checking the 'Feature_importance_' values we get from RandomForest classifier.
 
 <img src="FeatureImp.png">
+
+Age, date and reproduction are the top three features with respect to feature importance. 
 
 
 ### Reflection
@@ -312,7 +312,7 @@ We started off with the training set that Kaggle provided and cleaned and transf
 
 The process for this project was interesting in the sense that there was less emphasis on the actual algorithm and more on the data cleaning and transformation.
 
-As per my observation many time the data quality is of more importance than a good algorithm. And I feel this was one of the cases. I feel if they had given some more information about the animals. Like breed group, size info , etc., we could have had better predictive ability. But this information can be added using the existing data as well.
+The data quality is of more importance than a good algorithm. This might be one of those cases. If they had given some more information about the animals. Like breed group, size info , etc., we could have had better predictive ability. But this information can be added using the existing data as well.
 
 The solution presented in this project can be used in general setting for the City of Austin animal data. 
 The point to note here is that, city of Austin might not be a good reflection of the adoption habits of the entire country. 
@@ -323,9 +323,9 @@ If we can get the data for other cities as well, we can create a map of cities w
 
 ### Improvement
 
-There were a few improvements I would like to do on the project going forward. I would like to include and use the outcome-subtype column in the analysis in some way that it reflects with the output column. One more improvement that I would like to do going forward is gather the groups for all the breeds and separate them based on groups rather than the breed name. E.g. we know that chihuahua and shitzu are toy dog breeds and german shepherds and collies are herding breeds. I would like to separate the dog based on the breed group rather than the breed name. This would reduce the number of categories we have and might give a better idea on adoption preference for people in general.Based on the animal breed we can figure out the weight range that dog is expected to be. This would give an idea of the size of the animal. We can get an idea if people bigger or smaller animals. 
+There were a few improvements I would like to do on the project going forward. I would like to include and use the outcome-subtype column in the analysis in some way that it reflects with the output column. One more improvement that I would like to do going forward is gather the groups for all the breeds and separate them based on groups rather than the breed name. E.g. we know that chihuahua and shitzu are toy dog breeds and german shepherds and collies are herding breeds. I would like to separate the dog based on the breed group rather than the breed name. This would reduce the number of categories we have and might give a better idea on adoption preference for people in general.Based on the animal breed we can figure out the weight range that dog is expected to be. This would give an idea of the size of the animal. We can get an idea if people prefer bigger or smaller animals. 
 
-As we can see form the results on the kaggle leader board , better solutions do exist for this dataset, but the difference solution implemented here and the winning solution is not huge but it get more difficult as we try to find the best combinations of parameters for tuning the algorithm.   
+As we can see form the results on the kaggle leader board , better solutions do exist for this dataset, but the difference solution implemented here and the winning solution is not huge but it get more difficult to reach that level as we try to find the best combinations of parameters and beter features for tuning the algorithm.   
 
 
 -----------
