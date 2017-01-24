@@ -116,7 +116,7 @@ Here we see the distribution of number of animals based on if they were intact o
 
 We will now see some time based outcome plots. We will see the distribution of outcomes over the day of the week, month and time of day. 
 
-<img src="timeofDay.png">
+<img src="TimeofDay.png">
 
 <img src="WeekDay.png">
 
