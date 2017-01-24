@@ -254,7 +254,8 @@ Once the training data was fit using Random-forest I ran the predict_proba funct
 
 The initial solution for this problem would the out of box  RandomForest algorithm. To tune it further I ran both the RandomizedCV and GridcSearchCV algorithm to get better tunes parameters. The parameters I used for the GridSerachCV were as below:
 
-param_grid = {"max_depth": [3,6,10],
+param_grid = 
+              {"max_depth": [3,6,10],
               "max_features": [3,6,8,10],
               "min_samples_split": [3,6,10],
               "min_samples_leaf": [3,6,10],
@@ -276,6 +277,7 @@ As a comparison between RandomsearchCV and grid search CV we did not see a whole
 The final parameters used in the algorithm implementation are as given below:
 
 Parameters:     
+    
     {'bootstrap': True, 
     'min_samples_leaf': 9, 
     'max_features': 4, 
