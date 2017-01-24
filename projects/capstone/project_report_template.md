@@ -170,24 +170,19 @@ Here is the summary of the data we are dealing with:
 |top    | A705677  |  Max | 2015-08-11 00:00:00 |   Adoption    |    Partner   |
 |freq    |      1  |  136  |                 19 |      10769    |       7816   |
 
-|  |      AnimalType| SexuponOutcome |AgeuponOutcome     |              Breed  |
-| --- | --- | --- | --- | --- |
-|count    |   26729    |      26728    |      26711  |                 26729  | 
-|unique  |        2     |         5   |          44  |                  1380  | 
-|top     |      Dog | Neutered Male  |       1 year | Domestic Shorthair Mix  | 
-|freq     |   15595    |       9779   |        3969  |                  8810 |  
-
- |  | Color  |
- | --- | --- |
-|count    |     26729  |
-|unique    |      366  |
-|top    | Black/White  |
-|freq     |      2824  |
+|  |      AnimalType| SexuponOutcome |AgeuponOutcome     |              Breed  |Color  |
+| --- | --- | --- | --- | --- | --- |
+|count    |   26729    |      26728    |      26711  |                 26729  |  26729  |
+|unique  |        2     |         5   |          44  |                  1380  |    366  |
+|top     |      Dog | Neutered Male  |       1 year | Domestic Shorthair Mix  | Black/White  |
+|freq     |   15595    |       9779   |        3969  |                  8810 |        2824  |
 
 
 As we can see in summary of the data below, most of the data we are dealing with is categorical data. The size of the data frame is 26729. Here is a sample of the head of the data-frame. I used Pandas to download the training and testing data from CSV file and create a pandas data frame using this data.
 |AnimalID |Name|DateTime|OutcomeType|OutcomeSubtype|AnimalType|SexuponOutcome|AgeuponOutcome|Breed|Color|
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+ | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 |A671945|Hambone|2014-02-12 18:22:00|Return_to_owner|NaN|Dog|Neutered Male|1 year|Shetland Sheepdog Mix|Brown/White|
 |A656520	|Emily	|2013-10-13 12:44:00	|Euthanasia	|Suffering	|Cat	|Spayed Female	|1 year	|Domestic Shorthair Mix	|Cream Tabby|
 |A686464|	Pearce|	2015-01-31 12:28:00	|Adoption|	Foster|	Dog|	Neutered Male|	2 years	|Pit Bull Mix	|Blue/White|
