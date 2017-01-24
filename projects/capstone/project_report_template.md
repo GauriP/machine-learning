@@ -14,6 +14,7 @@ This project will be using the Austin Animal shelter data provided by Austin Ani
 ### Problem Statement
 
 The goal is to predict the outcome for an animal which enters the animal shelter. the rpocess to be followed is:
+    
     - Download the data from Kaggle website.
     - Preprocess the data columns as explained in the exploratory data analysis section.
     - Run the benchmark DecisionTree algorithm. 
@@ -24,11 +25,19 @@ The goal is to predict the outcome for an animal which enters the animal shelter
     
 The Output of the algorithm will give us the probability of outcome for each output category.
 Skills and tools used in the project:
+	
 	- Python 2.7
+	
 	- SciPy
+    
+    - Sklearn library
+	
 	- Numpy
+	
 	- Pandas
+	
 	- Seaborn
+	
 	- Mou (for report)
 
 
@@ -192,37 +201,42 @@ As we can see in summary of the data below, most of the data we are dealing with
 
 We will be modifying almost every column of data available to us to check if we can extract additional important information out of it. 
 
-**AnimalID: **Looking at the AnimalID column , I figured the first three characters of the ID are repeating for many or the IDs, Hence I thought it might give us some location information in the data. But looking at the data from the testing data, It looks like the same pattern is followed with the testing data animal IDs.  This column becomes useless to us for all practical purposes.
+**AnimalID:** Looking at the AnimalID column , I figured the first three characters of the ID are repeating for many or the entries, Hence it might give us some location information in the data. But looking at the data from the testing data, It looks like the same pattern is followed with the testing data animal IDs.  This column becomes useless to us for all practical purposes.
 
-**Name: ** The name itself of an animal is not of important to us. But it might be important to note that having a name or not might influence the outcome for the animal.
+**Name:** The name itself of an animal is not of important to us. But it might be important to note whether having a name or not might influence the outcome for the animal.
 
-**DateTime: ** This is a very interesting column which gives us a lot of information. This column gives us the data and time information at the time of the outcome. Using this column we can extract the weekday, month and time of the day the outcome occurred. We will see in the data exploration and visualization section how the outcome corresponds to the time , day and month of the outcome.
+**DateTime:** This is a very interesting column which gives us a lot of information. This column gives us the date and time information at the time of the outcome. Using this column we can extract the weekday, month and time of the day the outcome occurred. We will see in the data exploration and visualization section how the outcome corresponds to the time , day and month of the outcome.
 
-**OutcomeType: ** This is the target variable i.e. the variable we are trying to predict. We have 5 categories for prediction.
+**OutcomeType:** This is the target variable i.e. the variable we are trying to predict. We have 5 categories for prediction.
 
-**OutcomeSubtype: ** This column gives information about the reasons for the outcometype for some of the entries. I had intended to use this since it seems to be giving information about why the decision for the outcomes are taken, but in the kaggle test data we can see that they have not provided this column. Hence, I will not be taking this column into consideration for the purpose of this report.
+**OutcomeSubtype:** This column gives information about the reasons for the outcometype for some of the entries. I had intended to use this since it seems to be giving information about why the decision for the outcomes are taken, but in the kaggle test data we can see that they have not provided this column. Hence, I will not be taking this column into consideration for the purpose of this report.
 
-**AnimalType :** We have two unique animal types in this dataset. The animals can either be dogs or cats. We will not be making any changes to this column.
+**AnimalType:** We have two unique animal types in this dataset. The animals can either be dogs or cats. We will not be making any changes to this column.
 
-**SexUponOutcome: ** SexuponOutcome column gives us the gender of each individual animal. It also gives us information if the animal is neutered/spayed or intact. We have 5 categories here. It seems to be that there is a lot of information compacted into one column here. I decided to split this column into the gender or the animal and if they are intact or not. There are entries where this information is unknown, I have just left those entries as unknown.
+**SexUponOutcome:** SexuponOutcome column gives us the gender of each individual animal. It also gives us information if the animal is neutered/spayed or intact. We have 5 categories here. It seems to be that there is a lot of information compacted into one column here. I decided to split this column into the gender or the animal and if they are intact or not. There are entries where this information is unknown, I have just left those entries as unknown.
 
-**AgeUponOutcome: ** Age upon outcome gives us the information about that particular animal. This column gives string information about the age of the animal is weeks, months or years. I have converted the entries into the age of animal is days. For e.g. if the entry says the age of an animal is '5 months' I multiple 5 by 30 to get the approximate age of the animal. This method has its flaws since we would not know the exact age of the animals. But we can get a good approximation.
+**AgeUponOutcome:** Age upon outcome gives us the information about that particular animal. This column gives string information about the age of the animal is weeks, months or years. I have converted the entries into the age of animal is days. For e.g. if the entry says the age of an animal is '5 months' I multiple 5 by 30 to get the approximate age of the animal. This method has its flaws since we would not know the exact age of the animals. But we can get a good approximation.
 
-**Breed: ** This column gives information about the breed of the animals. We also get information if the animal is mix breed or not. I have split this column to give two columns with more concise breed information. The first column tells us if the animal is mix breed or pure bred. The other column takes into account only the first mentioned column in case if the two breeds are separated by a '/'.
+**Breed:** This column gives information about the breed of the animals. We also get information if the animal is mix breed or not. I have split this column to give two columns with more concise breed information. The first column tells us if the animal is mix breed or pure bred. The other column takes into account only the first mentioned column in case if the two breeds are separated by a '/'.
 
-**Color: ** This column gives the color information about the breed of the animal. If the data gives multiple colors for each animal, I choose only the first color. This reduces the number of factors we have to take into consideration. 
+**Color:** This column gives the color information about the breed of the animal. If the data gives multiple colors for each animal, I choose only the first color. This reduces the number of factors we have to take into consideration. 
 
 This will give us the various columns we can work with. I have used random forest algorithm to model the data and the decision tree algorithm as the benchmark for the data. The kaggle competition this project is based on evaluates the data using log_loss  method. And the benchmark score that they have used for the competition is **20.25113**. I will be considering this as the benchmark for the project. But as a personal benchmark to do better than would be the decision tree algorithm using the data the I have molded. 
 
 Once I have created the various new columns with the relevant data I visualize them to get a good idea about the trends I can observe. We can see those visualizations in the exploratory visualization section below. Once we get an idea of which columns might have a higher weight towards the decision. We can see the correlation values for this data in the Data exploration segment. For calculating correlation between the variables I am going to use Spearmans Rho or Kendalls Tau since Pearsons Rho needs calculation of mean for calculating the correlation. We use the pandas corr function indicating the type of correlation. 
 
 To set the bench mark I first start with the decision-tree algorithm from sklearn library. Then move onto the random forest algorithm form sklearn library as well. To get the best parameters for the algorithm I ran the gridsearchCV algorithm with the grid param as given below:
-param_grid = {"max_depth": [1,3,6,10],
+
+
+param_grid = 
+			  
+			  {"max_depth": [1,3,6,10],
               "max_features": range(1,10,1),
               "min_samples_split": range(2,10,1),
               "min_samples_leaf": range(1,10,1),
               "bootstrap": [True, False],
               "criterion": ["gini", "entropy"]}
+
 What this function does is, it takes the initialized ML algorithm , which in our case is the random forest algorithm and runs combinations for the grid parameters given above. The thing to note about grid searchCV is that it does not fit over all the parameters, it fits over parameters selectively, depending on if the parameter would generate a good result.
 In my case with the above parameters it took a very long time for the grid-search algorithm to run.
 
@@ -240,11 +254,6 @@ Testing was performed on data provided by kaggle, and since they had not provide
 Once the training data was fit using Random-forest I ran the predict_proba function on the testing data. 
 
 ### Refinement
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
-
 
 The initial solution for this problem would the out of box  RandomForest algorithm. To tune it further I ran both the RandomizedCV and GridcSearchCV algorithm to get better tunes parameters. The parameters I used for the GridSerachCV were as below:
 
@@ -263,19 +272,17 @@ I saw a marked improvement in the RandomForest implementation using the tuned pa
 
 ### Model Evaluation and Validation
 
-**Run the chi square test**
-
 The final parameters chosen by gridsearchCV were chosen to because they gave the best results in the tried combinations. 
 
 As a comparison between RandomsearchCV and grid search CV we did not see a whole lot of improvement. There were instances where RandomsearchCV performed just slightly better than gridsearchCV. 
 
 The final parameters used in the algorithm implementation are as given below:
-**Give the final parameters once the gridsearhcv analysis completes**
+** final parameters**
 
 ### Justification
 
-The bench mark score that is provided on the Kaggle competition leaderboard is 20.25113 (log-loss method as described earlier). My personal benchmark using Decision tree classifier scores at 16.3507. The results I get from using random forest algorithm right out of the box is 1.0219. The result I get from tuning the random forest algorithm using RandomizedCV is **add score**. the result I get from using GridsearchCV is **add score here**. 
-There are other solutions on the Kaggle leaderboard which have performed much better classification than the results I have found. Based on this my conclusion is while the model implemented here is giving a good score it still needs to be tuned further to 
+The bench mark score that is provided on the Kaggle competition leaderboard is 20.25113 (log-loss method as described earlier). My personal benchmark using Decision tree classifier scores at 16.3507. The results I get from using random forest algorithm right out of the box is 1.0219. The result I get from tuning the random forest algorithm using RandomizedCV is **0.86391**. the result I get from using GridsearchCV is **0.86818**. I ran the RandomizedsearchCV with a larger set of parameters. The score i got with that experiment is **0.85437**. As we can see the result we got with this model ismuch better than the grid searchCV result. We cannot run the same parameter grid in GridsearchCV since it would take prohibitive amount of time to run the grid with these many parameter values. 
+There are other solutions on the Kaggle leaderboard which have performed much better classification than the results I have found. Based on this my conclusion is while the model implemented here is giving a good score it still needs to be tuned further to to be useful in a production environment.
 
 
 ## V. Conclusion
@@ -283,10 +290,15 @@ There are other solutions on the Kaggle leaderboard which have performed much be
 
 ### Free-Form Visualization
 
-**Post the correlation matrix right here**
+We will take a look at the correlation matrix of the features from the final dataset:
+
+<img src="corr.png">
 
 Analyze the correlation matrix.
-**If possible add the visualization form a winning model**
+
+Also we can see the importance given to every feature by checking the 'Feature_importance_' values we get from RandomForest classifier.
+
+<img src="FeatureImp.png">
 
 
 ### Reflection
@@ -312,12 +324,26 @@ As we can see form the results on the kaggle leader board , better solutions do 
 
 -----------
 
-**Before submitting, ask yourself. . .**
+### References
 
-- Does the project report you’ve written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly commented?
-- Does the code execute without error and produce results similar to those reported?
+http://english.stackexchange.com/questions/28498/precise-names-for-parts-of-a-day
+
+http://scikit-learn.org/stable/auto_examples/model_selection/randomized_search.html
+
+https://www.analyticsvidhya.com/blog/2015/06/tuning-random-forest-model/
+
+http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+
+http://stackoverflow.com/questions/26489961/python-rank-order-correlation-for-categorical-data
+
+https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm
+
+https://www.kaggle.com/c/shelter-animal-outcomes/leaderboard
+
+http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.corr.html
+
+https://en.wikipedia.org/wiki/Random_forest
+
+http://blog.echen.me/2011/04/27/choosing-a-machine-learning-classifier/
+
+http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
