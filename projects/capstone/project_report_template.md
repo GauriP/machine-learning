@@ -8,22 +8,24 @@ January 2017
 
 ### Project Overview
 
-This project will be using the Austin Animal shelter data provided by Austin Animal Center to predict the outcomes for shelter animals. This data is part of a completed competition on Kaggle website. According to the sources, 8-12 million animals enter shelters every year and about 5-9 million of those animals are euthanized. In this project we will be exploring the data provided to understand the trends behind the animal adoptions for the city of Austin. We will be starting of with Exploratory Data Analysis, both visual and statistical data. Once we get an idea about the correlations in the data, we will use classification methods to predict if the animal will adopted or not. This is a multi-class classification problem, and we will get the benchmark for the analysis comparison from the outcomes of the data science competition on kaggle.
+This project will be using the Austin Animal shelter data provided by Austin Animal Center to predict the outcomes for shelter animals. This data is part of a completed competition on Kaggle website. 
+According to the sources, 8-12 million animals enter shelters every year and about 5-9 million of those animals are euthanized. In this project we will be exploring the data provided to understand the trends behind the animal adoptions for the city of Austin. We will be starting of with Exploratory Data Analysis using both visual and statistical data. Once we get an idea about the correlations in the data, we will use classification methods to predict if the animal will adopted or not. This is a multi-class classification problem, and we will get the benchmark for the analysis comparison from the outcomes of the data science competition on kaggle.
 
 
 ### Problem Statement
 
-The goal is to predict the outcome for an animal which enters the animal shelter. the rpocess to be followed is:
+The goal is to predict the outcome for an animal which enters the animal shelter. The process to be followed is:
     
     - Download the data from Kaggle website.
     - Preprocess the data columns as explained in the exploratory data analysis section.
     - Run the benchmark DecisionTree algorithm. 
-    - Gather the probability of the outcome .
+    - Gather the probability of the outcome.
     - Run the RandomForest algorithm on the data.
     - Run GridsearchCV and RandomizedCV algorithm to tune the model.
     - Compare the output from the different algorithms and complete analysis.
     
 The Output of the algorithm will give us the probability of outcome for each output category.
+
 Skills and tools used in the project:
 	
 	- Python 2.7
@@ -44,7 +46,7 @@ Skills and tools used in the project:
 ### Metrics
 
 
-The test data that is provided by the kaggle team does not provide the output vector. Hence, evaluation is possible only in the kaggle environment. I will be using the predict_prob_ function from randomForest algorithm from sklearn, that gives the probability for each factor in the outcometype column. 
+The test data that is provided by the kaggle team does not provide the output vector. Hence, evaluation is possible only in the kaggle environment. I will be using the predict_prob_ function from randomForest algorithm this output gives the probability for each factor in the outcometype column. 
 
 
 
@@ -102,15 +104,15 @@ In the plot above we can see the gender distribution of the animals according to
 
 <img src="Age.png">
 
-We can see this distribution of cats and dogs over the major age brackets in the box plot above. We can see that most of the adoption that happen for both cats and dogs happen for lower age group of animals. Interestingly most of the cats that get euthanized spread over a wide range of age. And most of the cats that died in the shelter are very young. This might be because the animal is sick when it got to the shelter.
+We can see this distribution of cats and dogs over the major age brackets in the box plot above. Most of the adoption that happen for both cats and dogs happen for lower age group of animals. Interestingly most of the cats that get euthanized spread over a wide range of age. And most of the cats that died in the shelter are very young. This might be because the animal is sick when it got to the shelter.
 
 <img src="Mix.png">
 
-In the violin plot above we can see the distribution of animals based on if they are mixed breed or not, with the age of the animal over y axis. We can see that most of the adoption happen at lower age for both mix and purebred animals. While most of the animals euthanized are spread over lower age groups if they are mix breeds, and they have a more even spread if they are purebred animals. 
+In the violin plot above the distribution of animals is based on if they are mixed breed or not, with the age of the animal over y axis. We can see that most of the adoption happen at lower age for both mix and purebred animals. While most of the animals euthanized are spread over lower age groups if they are mix breeds, and they have a more even spread if they are purebred animals. 
 
 <img src="Repro.png">
 
-Here we see the distribution of number of animals based on if they were intact or not at the time of outcome. Most of the animals that get Adopted are spayed or neutered. We can see most of the animals that get transferred are intact. We can see that a lot many animals that are euthanized or die in care are intact. Many shelters have a rule where, upon adoption the animals has to be fixed. This plot might be an indication of that rule. Very few animals that get adopted are intact. 
+Here we see the distribution of number of animals based on if they were intact or not at the time of outcome. Most of the animals that get Adopted are spayed or neutered. We can see most of the animals that get transferred are intact. Many animals that are euthanized or die in care are intact. Many shelters have a rule where, upon adoption the animals has to be fixed. This plot might be an indication of that rule. Very few animals that get adopted are intact. 
 
 We will now see some time based outcome plots. We will see the distribution of outcomes over the day of the week, month and time of day. 
 
@@ -131,17 +133,13 @@ When we look at the distribution over the months we can see the sinusoidal distr
 In this plot we see the box plot for distribution of outcome over the months. We have he age distribution along the y axis. 
 
 
-
-
-
-
 ### Algorithms and Techniques
 
 Given than the target variable for our data is a categorical value, we will be using classification method for this project. We will be starting off with decision tree algorithm to get an idea of what the score would be with just a single tree implementation. Then we move on to RandomForest algorithm. 
 
-The decision tree algorithm would be the benchmark for my code. But the Kaggle competition has provided with a built in benchmark value for this particular competition. 
+The decision tree algorithm would be the benchmark for my code. The Kaggle competition has provided with a built in benchmark value for this particular competition. 
 
-Random forest classifier is an ensemble method where in the algorithm creates number of decision trees based on the data provided to the algorithm. The issue with decision tree classifier is that it overfits the data. Random forest avoids such an problem as it uses multiple trees. The data selected for each tree is gathered by using bootstrap aggregation method or bagging. Bagging randomly chooses a subset of data form the training data with replacement and creates decision tree based on this data.
+Random forest classifier is an ensemble method where in the algorithm creates number of decision trees based on the data provided to the algorithm. The issue with decision tree classifier is that it overfits the data. Random forest avoids such a problem as it uses multiple trees. The data selected for each tree is gathered by using bootstrap aggregation method or bagging. Bagging randomly chooses a subset of data form the training data with replacement and creates decision tree based on this data.
 After training, prediction decision is made by taking majority vote from the decision trees that are generated during training. One thing to note with random forest algorithm is that it uses modified tree learning algorithm, this means that if a particular features is a strong predictor, these features will be selected in many of the trees giving strong correlation between the trees thus created.
 In general case if the problem is that of classification, Sqrt(p) features will be used for creating the trees, p is the number of available features.
 
@@ -153,8 +151,8 @@ Evaluation (Directly from Kaggle)
 
 Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
 
-log-loss=−1N∑i=1N∑j=1Myijlog(pij),
-logloss=−1N∑i=1N∑j=1Myijlog⁡(pij),
+                                   logloss= (-1/N)\sum_{i=1}^{N} \sum_{j=1}^{M}Y_ij log(P_ij)
+
 Where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(I\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(I\\) belongs to outcome \\(j\\).
 
 The submitted probabilities for a given animal are not required to sum to one because they are rescaled prior to being scored (each row is divided by the row sum). In order to avoid the extremes of the log function, predicted probabilities are replaced with \\(max(min(p,1-10^{-15}),10^{-15})\\).
@@ -277,7 +275,14 @@ The final parameters chosen by gridsearchCV were chosen to because they gave the
 As a comparison between RandomsearchCV and grid search CV we did not see a whole lot of improvement. There were instances where RandomsearchCV performed just slightly better than gridsearchCV. 
 
 The final parameters used in the algorithm implementation are as given below:
-** final parameters**
+
+Parameters:     
+    {'bootstrap': True, 
+    'min_samples_leaf': 9, 
+    'max_features': 4, 
+    'criterion': 'gini', 
+    'min_samples_split': 6, 
+    'max_depth': 9}
 
 ### Justification
 
