@@ -186,13 +186,23 @@ Here is the summary of the data we are dealing with:
 As we can see in summary of the data below, most of the data we are dealing with is categorical data. The size of the data frame is 26729. Here is a sample of the head of the data-frame. I used Pandas to download the training and testing data from CSV file and create a pandas data frame using this data. Sample of the data frame is given below:
 
 
-| AnimalID | Name | DateTime | OutcomeType | OutcomeSubtype | AnimalType | SexuponOutcome | AgeuponOutcome | Breed | Color |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| A671945 | Hambone | 2014-02-12 18:22:00 | Return_to_owner | NaN | Dog | Neutered Male | 1 year | Shetland Sheepdog Mix | Brown/White |
-|A656520	|Emily	|2013-10-13 12:44:00	|Euthanasia	|Suffering	|Cat	|Spayed Female	|1 year	|Domestic Shorthair Mix	|Cream Tabby|
-|A686464|	Pearce|	2015-01-31 12:28:00	|Adoption|	Foster|	Dog|	Neutered Male|	2 years	|Pit Bull Mix	|Blue/White|
-|A683430|	NaN	|2014-07-11 19:09:00	|Transfer|	Partner|	Cat|	Intact Male|	3 weeks	|Domestic Shorthair Mix	|Blue Cream|
-|A667013|	NaN	|2013-11-15 12:52:00	|Transfer|	Partner|	Dog|	Neutered Male|	2 years	|Lhasa Apso/Miniature Poodle|	Tan|
+| AnimalID | Name | DateTime | OutcomeType | OutcomeSubtype | AnimalType | SexuponOutcome | AgeuponOutcome |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| A671945 | Hambone | 2014-02-12 18:22:00 | Return_to_owner | NaN | Dog | Neutered Male | 1 year | 
+|A656520	|Emily	|2013-10-13 12:44:00	|Euthanasia	|Suffering	|Cat	|Spayed Female	|1 year	|
+|A686464|	Pearce|	2015-01-31 12:28:00	|Adoption|	Foster|	Dog|	Neutered Male|	2 years	|
+|A683430|	NaN	|2014-07-11 19:09:00	|Transfer|	Partner|	Cat|	Intact Male|	3 weeks	|
+|A667013|	NaN	|2013-11-15 12:52:00	|Transfer|	Partner|	Dog|	Neutered Male|	2 years	|
+
+
+ | Breed | Color |
+ | --- | --- |
+ |Shetland Sheepdog Mix | Brown/White |
+ |Domestic Shorthair Mix	|Cream Tabby|
+ |Pit Bull Mix	|Blue/White|
+ |Domestic Shorthair Mix	|Blue Cream|
+ |Lhasa Apso/Miniature Poodle|	Tan|
+ 
 
 
 We will be modifying almost every column of data available to us to check if we can extract additional important information out of it. 
@@ -255,6 +265,7 @@ Once the training data was fit using Random-forest I ran the predict_proba funct
 The initial solution for this problem would the out of box  RandomForest algorithm. To tune it further I ran both the RandomizedCV and GridcSearchCV algorithm to get better tunes parameters. The parameters I used for the GridSerachCV were as below:
 
 param_grid = 
+              
               {"max_depth": [3,6,10],
               "max_features": [3,6,8,10],
               "min_samples_split": [3,6,10],
@@ -278,12 +289,12 @@ The final parameters used in the algorithm implementation are as given below:
 
 Parameters:     
     
-    {'bootstrap': True, 
-    'min_samples_leaf': 9, 
-    'max_features': 4, 
-    'criterion': 'gini', 
-    'min_samples_split': 6, 
-    'max_depth': 9}
+    		{'bootstrap': True, 
+    		'min_samples_leaf': 9, 
+    		'max_features': 4, 
+    		'criterion': 'gini', 
+    		'min_samples_split': 6, 
+    		'max_depth': 9}
 
 ### Justification
 
