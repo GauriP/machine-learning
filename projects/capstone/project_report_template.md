@@ -151,6 +151,7 @@ Evaluation (Directly from Kaggle)
 
 Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
 
+$$\sum_{i=1}^N$$
 $$logloss= (-1/N)\sum_{i=1}^{N} \sum_{j=1}^{M}Y_ij log(P_ij)$$
 
 Where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(I\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(I\\) belongs to outcome \\(j\\).
