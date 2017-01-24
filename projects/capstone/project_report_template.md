@@ -181,9 +181,9 @@ Here is the summary of the data we are dealing with:
 As we can see in summary of the data below, most of the data we are dealing with is categorical data. The size of the data frame is 26729. Here is a sample of the head of the data-frame. I used Pandas to download the training and testing data from CSV file and create a pandas data frame using this data.
 
 
-|AnimalID |Name|DateTime|OutcomeType|OutcomeSubtype|AnimalType|SexuponOutcome|AgeuponOutcome|Breed|Color|
- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|A671945|Hambone|2014-02-12 18:22:00|Return_to_owner|NaN|Dog|Neutered Male|1 year|Shetland Sheepdog Mix|Brown/White|
+| AnimalID | Name | DateTime | OutcomeType | OutcomeSubtype | AnimalType | SexuponOutcome | AgeuponOutcome | Breed | Color |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| A671945 | Hambone | 2014-02-12 18:22:00 | Return_to_owner | NaN | Dog | Neutered Male | 1 year | Shetland Sheepdog Mix | Brown/White |
 |A656520	|Emily	|2013-10-13 12:44:00	|Euthanasia	|Suffering	|Cat	|Spayed Female	|1 year	|Domestic Shorthair Mix	|Cream Tabby|
 |A686464|	Pearce|	2015-01-31 12:28:00	|Adoption|	Foster|	Dog|	Neutered Male|	2 years	|Pit Bull Mix	|Blue/White|
 |A683430|	NaN	|2014-07-11 19:09:00	|Transfer|	Partner|	Cat|	Intact Male|	3 weeks	|Domestic Shorthair Mix	|Blue Cream|
