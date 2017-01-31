@@ -46,7 +46,15 @@ Skills and tools used in the project:
 ### Metrics
 
 
-The test data that is provided by the kaggle team does not provide the output vector. Hence, evaluation is possible only in the kaggle environment. I will be using the predict_prob_ function from randomForest algorithm this output gives the probability for each factor in the outcometype column. 
+The test data that is provided by the kaggle team does not provide the output vector. Hence, evaluation is possible only in the kaggle environment. I will be using the [predict_proba(x)](http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier.predict_proba) function from RandomForest algorithm this output gives the probability for each factor in the outcometype column. This is good metric because it gives us an understanding of possibility of all the given outcomes. For measuring the score of the model, We need to measure it using the submission page on the kaggle competition page and this takes input in the same form as predict_proba() output.
+
+Evaluation (Directly from Kaggle)
+
+Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
+
+$$logloss = (-1/N) \sum_{i=1}^N \sum_{j=1}^M Y_ij log(P_ij)$$
+
+Where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(I\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(I\\) belongs to outcome \\(j\\).
 
 
 
@@ -79,6 +87,20 @@ Breed             object : This gives the breed of the animal and tells us if th
 Color             object : This feature gives the prominent colors found in the animal.
 
 In the test data we do not have OutcomeType and OutcomeSubtype column. The score comparison can be done only directly with the kaggle submissions page. The AnimalID column is given as ID column in test data. Some of the data entries for the columns above is blank. This might be due to data entry error or lack of information. We will take a look into this further in the data pre processing section. 
+
+Here is some information about the dataset:
+
+Length of training dataset: 267290
+
+Length of testing dataset: 91648
+
+Names of the columns given: 
+
+['AnimalID' 'Name' 'DateTime' 'OutcomeType' 'OutcomeSubtype' 'AnimalType'
+ 'SexuponOutcome' 'AgeuponOutcome' 'Breed' 'Color']
+ 
+Most of the features in this dataset are Categorical features. We will be performing some conversions in the data preprocessing section to make the entries usable.
+We will take a look at the sample and statistics of the datset in the data exploration section.
 
 ### Exploratory Visualization
 
@@ -141,22 +163,54 @@ The decision tree algorithm would be the benchmark for my code. The Kaggle compe
 
 Random forest classifier is an ensemble method where in the algorithm creates number of decision trees based on the data provided to the algorithm. The issue with decision tree classifier is that it overfits the data. Random forest avoids such a problem as it uses multiple trees. The data selected for each tree is gathered by using bootstrap aggregation method or bagging. Bagging randomly chooses a subset of data form the training data with replacement and creates decision tree based on this data.
 After training, prediction decision is made by taking majority vote from the decision trees that are generated during training. One thing to note with random forest algorithm is that it uses modified tree learning algorithm, this means that if a particular features is a strong predictor, these features will be selected in many of the trees giving strong correlation between the trees thus created.
+
+We will discuss the hyperparameters used in RandomForest algorithm. 
+Here is the sklearn RandomForestClassifier function:
+
+class sklearn.ensemble.RandomForestClassifier(n_estimators=10, criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, min_impurity_split=1e-07, bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=0, warm_start=False, class_weight=None)
+
+n_estimators=10: This gives the total number of trees in the forest. We should use high number for this as it gives stronger more stable prediction.
+
+criterion='gini': This is the criterion for quantifying the quality of the split. The default option is 'gini' and other option is 'entropy'.
+
+max_depth=None:  It gives the maximumdepth of the tree if not specified it goes down to all the leaves. The default is None for this parameters.
+
+min_samples_split=2: The minimum number of samples for spltting the internal nodes.
+
+min_samples_leaf=1: The minimum number if samples required to be at a leaf node
+
+min_weight_fraction_leaf=0.0: The minimum weighted fraction of the sum total of weights (of all the input samples) required to be at a leaf node. Samples have equal weight when sample_weight is not provided.
+
+max_features='auto': This gives the number of features to consider for best split.
+
+max_leaf_nodes=None: This parameters grows the tree in best first fashion. Best nodes are defined as relative reduction in impurity.
+
+min_impurity_split=1e-07: Threshold for early stopping in tree growth. A node will split if its impurity is above the threshold, otherwise it is a leaf.
+
+bootstrap=True: Whether bootstrap samples are used when building trees.
+
+oob_score=False: Random forest uses Bootstrap method for sampling i.e. random sampling with replacement.one third of the data is not used in this process in every pass. This gives one third of the data for testing purpose. These are out of bag samples and the error estimated on these samples is the out of bag error.
+
+n_jobs=1: this gives the number of jobs to run in parallel for both fit and predict. 
+
+random_state=None: gives random state for the algorithm . This can be integer, random state or None.
+
+verbose=0: Gives the levels for printing out information for the tree process.
+
+warm_start=False: If set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble.
+
+class_weight=None: weights associated with classes, if default, the weight for each class is 1.
+
 In general case if the problem is that of classification, Sqrt(p) features will be used for creating the trees, p is the number of available features.
 
 The dataset that I am working with here is a good candidate for random forest algorithm. The issue of overfitting which we observe in decision trees is not present in random forest. We don't have to worry about tuning the data too much for random forest algorithm. It is fast and scalable. But, we have to rebuild the tree if new data comes into picture. Since that is not a point of contention for us I am going to go ahead with Random Forest as the classification algorithm.
 
 ### Benchmark
 
-Evaluation (Directly from Kaggle)
-
-Submissions are evaluated using the multi-class logarithmic loss. Each incident has been labeled with one true class. For each animal, you must submit a set of predicted probabilities (one for every class). The formula is then,
-
-$$logloss = (-1/N) \sum_{i=1}^N \sum_{j=1}^M Y_ij log(P_ij)$$
-
-Where N is the number of animals in the test set, M is the number of outcomes, \\(log\\) is the natural logarithm, \\(y_{ij}\\) is 1 if observation \\(I\\) is in outcome \\(j\\) and 0 otherwise, and \\(p_{ij}\\) is the predicted probability that observation \\(I\\) belongs to outcome \\(j\\).
+ I will be using the decision tree algorithm as a benchmark, and aim for a better score as compared to decision tree algorithm. We will see what kind of data the decision tree algorithm provides us after implementation. The reason for this is that I can run Decision tree on the data frame I have cleaned for both the algorithms and do an apples to apples comparison.
 
 [Kaggle competition](https://www.kaggle.com/c/shelter-animal-outcomes).
-In the [Leaderboard](https://www.kaggle.com/c/shelter-animal-outcomes/leaderboard) page in the link to the competition above we can see that Kaggle has created an All Adopted Benchmark. I will be using this benchmark for project purpose. But as a personal challenge I will be using the decision tree algorithm as a benchmark, and aim for a better score as compared to decision tree algorithm. The reason for this is that I can run Decision tree on the data frame I have cleaned for both the algorithms and do an apples to apples comparison.
+In the [Leaderboard](https://www.kaggle.com/c/shelter-animal-outcomes/leaderboard) page in the link to the competition above we can see that Kaggle has created an All Adopted Benchmark the value for this is a score of **20.25113** with loss-loss method. This data is given just for reference to the ocmpetition.
 
 
 ## III. Methodology
@@ -254,15 +308,20 @@ In my case with the above parameters it took a very long time for the grid-searc
 ### Implementation
 
 Sklearn library was used in the implementation of this project. 
+
 Before I could run any classification algorithm on the data as is, I ran label-encoder on the categorical data in the dataset. This makes the data usable in the algorithms we tried for modeling. 
+
 I ran the simple out the box Decision tree algorithm, and then the Random Forest algorithm. Further tuning with gridsearchCV and RandomizedsearchCV was tried to get the best parameters.
+
 The algorithm fitting process was relatively straightforward in this project. The tricky part was gathering useful information from the dataset that we were provided. Since we used Random forest algorithm, I did not need to cross-validation to check cross-validation score on the data.
+
 Testing was performed on data provided by kaggle, and since they had not provided with the correct output the accuracy of the output could only be tested using the score on the kaggle leaderboard. 
-Once the training data was fit using Random-forest I ran the predict_proba function on the testing data. 
+
+Once the training data was fit using Random-forest I ran the predict_proba(a) function on the testing data. 
 
 ### Refinement
 
-The initial solution for this problem would the out of box  RandomForest algorithm. To tune it further I ran both the RandomizedCV and GridcSearchCV algorithm to get better tunes parameters. The parameters I used for the GridSerachCV were as below:
+The initial solution for this problem would the out of box  RandomForest algorithm. To tune it further I ran both the RandomizedCV and GridcSearchCV algorithm to get better tunes parameters. The parameters I used for the tuning algorithm were as below:
 
 param_grid = 
               
@@ -275,15 +334,41 @@ param_grid =
        
 I saw a marked improvement in the RandomForest implementation using the tuned parameters. 
 
+|Randomized CV|GridsearchCV|
+| --- | --- |
+|0.85437|0.86818|
+
+The table above shows the best score form both RandomizedCV and GridsearchCV algorithm. As we can see the difference between the score is not very considerable. But the time taken for completion for RandomizedCV for the same set of large parameters was considerably much lesser than GridsearchCV. Hence, As wel will be seeing in the conclusion section, RandomizedCV is preffered method of tuning the variables as it gives a good balance between score and runtime for the algorithm.
+
+To check the robustness of the algorithm we used k-fold cross validation method. The issue faced using this method was that we do not have the output for test data, hence we could not merge then divide the test and train data. We can run k-fold validation only on the training data. We do not have any means to try and test the output of the test data by cross validation. 
+Here are the score for ten fold validation from randomforest classifier:
+
+|Fold number|mean accuracy score|
+| --- | --- |
+|1|0.676393565282|
+|2|0.671530115975|
+|3|0.664796109241|
+|4|0.662925551814|
+|5|0.68125701459|
+|6|0.665170220726|
+|7|0.652450430228|
+|8|0.677890011223|
+|9|0.679386457164|
+|10|0.669910179641|
+
+From the table above we can see that the accuracy scores for the data does not change drastically, this can attest for the robustness of the classifier.
+
+
+
 
 
 ## IV. Results
 
 ### Model Evaluation and Validation
 
-The final parameters chosen by gridsearchCV were chosen to because they gave the best results in the tried combinations. 
+The final parameters chosen by RandomizedsearchCV were chosen to because they gave the best results in the tried combinations. 
 
-As a comparison between RandomsearchCV and grid search CV we did not see a whole lot of improvement. There were instances where RandomsearchCV performed just slightly better than gridsearchCV. 
+As a comparison between RandomsearchCV and gridsearch CV we did not see a whole lot of improvement. There were instances where RandomsearchCV performed just slightly better than gridsearchCV. We can see the explanation for this in the Refinement section.
 
 The final parameters used in the algorithm implementation are as given below:
 
@@ -298,7 +383,17 @@ Parameters:
 
 ### Justification
 
-The bench mark score that is provided on the Kaggle competition leaderboard is **20.25113** (log-loss method as described earlier). My personal benchmark using Decision tree classifier scores at 16.3507. The results I get from using random forest algorithm right out of the box is 1.0219. The result I get from tuning the random forest algorithm using RandomizedCV is **0.86391**. the result I get from using GridsearchCV is **0.86818**. I ran the RandomizedsearchCV with a larger set of parameters. The score i got with that experiment is **0.85437**. As we can see the result we got with this model is slightly better than the grid searchCV result. We cannot run the same parameter grid in GridsearchCV since it would take prohibitively longer amount of time to run the grid with these many parameter values. 
+The bench mark score that is provided on the Kaggle competition leaderboard is **20.25113** (log-loss method as described earlier). 
+
+The benchmark using Decision tree classifier scores at **16.3507**. 
+
+The results I get from using random forest algorithm right out of the box is **1.0219**. 
+
+The result I get from using GridsearchCV is **0.86818**. 
+
+I ran the RandomizedsearchCV with a larger set of parameters. The score I got with that experiment is **0.85437**. 
+
+As we can see the result we got with this model is slightly better than the grid searchCV result. We cannot run the same parameter grid in GridsearchCV since it would take prohibitively longer amount of time to run the grid with these many parameter values. 
 There are other solutions on the Kaggle leaderboard which have performed much better classification than the results I have found. Based on this my conclusion is while the model implemented here is giving a good score it still needs to be tuned further to to be useful in a production environment.
 
 
@@ -366,3 +461,5 @@ https://en.wikipedia.org/wiki/Random_forest
 http://blog.echen.me/2011/04/27/choosing-a-machine-learning-classifier/
 
 http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
+
+https://www.quora.com/What-is-the-out-of-bag-error-in-Random-Forests
